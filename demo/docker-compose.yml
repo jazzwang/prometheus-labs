@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+
+  prometheus:
+    image: prom/prometheus:v2.1.0
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/conf:/etc/prometheus
+      - ./prometheus/data:/prometheus
+
+  grafana:
+    image: grafana/grafana:4.6.3
+    hostname: grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+
+  kafka:
+    image: jazzwang/kafka:latest
+    hostname: kafka
+    container_name: kafka
+    volumes:
+      - ./kafka-broker:/etc/kafka
+    environment:
+      - KAFKA_OPTS=-javaagent:/etc/kafka/jmx_prometheus_javaagent.jar=7071:/etc/kafka/kafka-jmx.yml
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7071/metrics"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  cassandra:
+    image: cassandra
+    hostname: cassandra
+    container_name: cassandra
+    volumes:
+      - ./cassandra:/data/cassandra
+    environment:
+      - JVM_OPTS=-javaagent:/data/cassandra/jmx_prometheus_javaagent.jar=7070:/data/cassandra/cdra-jmx.yml
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7070/metrics"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  fluentd:
+    build: ./fluentd
+    image: jazzwang/fluentd:v1.0
+    hostname: fluentd
+    container_name: fluentd
+    depends_on:
+      - kafka
+    volumes:
+      - ./fluentd/etc:/fluentd/etc
+      - ./fluentd/data:/tmp
+
+  fluentd-exporter:
+    build: ./fluentd-exporter
+    image: jazzwang/fluentd-exporter:0.1.0
+    hostname: fluentd-exporter
+    container_name: fluentd-exporter
+    depends_on:
+      - fluentd
+    command: fluentd_exporter -scrape_uri http://fluentd:24220/api/plugins.json

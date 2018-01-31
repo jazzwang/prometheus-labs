@@ -1,0 +1,29 @@
+global:
+  scrape_interval:     5s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 5s # By default, scrape targets every 15 seconds.
+
+scrape_configs:
+ - job_name: 'cassandra'
+   static_configs:
+    - targets:
+      - cassandra:7070
+
+ - job_name: 'kafka'
+   static_configs:
+    - targets:
+      - kafka:7071
+
+ - job_name: 'fluentd'
+   static_configs:
+    - targets:
+      - fluentd-exporter:9309
+
+ - job_name: 'grafana'
+   static_configs:
+    - targets:
+      - grafana:3000
+
+ - job_name: 'prometheus'
+   static_configs:
+    - targets:
+      - prometheus:9090
