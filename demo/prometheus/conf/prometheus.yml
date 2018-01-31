@@ -2,6 +2,12 @@ global:
   scrape_interval:     5s # By default, scrape targets every 15 seconds.
   evaluation_interval: 5s # By default, scrape targets every 15 seconds.
 
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+
 scrape_configs:
  - job_name: 'cassandra'
    static_configs:

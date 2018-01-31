@@ -5,9 +5,9 @@ all:
 	@echo ""
 init: check
 	@sbin/init.sh
-build:
+build: init
 	@sbin/build.sh
-test: init build
+test:
 	@sbin/test.sh
 stop:
 	@sbin/stop.sh

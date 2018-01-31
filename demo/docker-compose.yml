@@ -1,6 +1,14 @@
-version: '3'
+version: '2'
 
 services:
+
+  alertmanager:
+    image: prom/alertmanager
+    hostname: alertmanager
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager/data:/alertmanager
+      - ./alertmanager/conf/config.yml:/etc/alertmanager/config.yml
 
   prometheus:
     image: prom/prometheus:v2.1.0
@@ -31,11 +39,6 @@ services:
       - ./kafka-broker:/etc/kafka
     environment:
       - KAFKA_OPTS=-javaagent:/etc/kafka/jmx_prometheus_javaagent.jar=7071:/etc/kafka/kafka-jmx.yml
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7071/metrics"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
 
   cassandra:
     image: cassandra
@@ -45,11 +48,6 @@ services:
       - ./cassandra:/data/cassandra
     environment:
       - JVM_OPTS=-javaagent:/data/cassandra/jmx_prometheus_javaagent.jar=7070:/data/cassandra/cdra-jmx.yml
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7070/metrics"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
 
   fluentd:
     build: ./fluentd
