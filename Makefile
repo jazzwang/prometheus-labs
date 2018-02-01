@@ -5,7 +5,6 @@ all:
 	@echo ""
 init: check
 	@sbin/init.sh
-build: init
 	@sbin/build.sh
 test:
 	@sbin/test.sh

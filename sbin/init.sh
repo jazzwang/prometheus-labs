@@ -6,3 +6,6 @@ mkdir -p demo/prometheus/data
 mkdir -p demo/grafana/data
 mkdir -p demo/cassandra
 mkdir -p demo/fluentd/data
+## grant write permission for non-root docker images
+chmod a+w demo/prometheus/data	## prom/prometheus user `noboday (uid = 65534)`
+chmod a+w demo/fluentd/data     ## fluent/fluntd user `fluent (uid=)`
