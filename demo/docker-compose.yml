@@ -55,6 +55,13 @@ services:
       - JAVA_OPTS=-Xmx512m
       - APPLICATION_SECRET=letmein
 
+  kafka-exporter:
+    build: ./kafka-exporter
+    image: jazzwang/kafka-exporter:0.1.0
+    hostname: kafka-exporter
+    container_name: kafka-exporter
+    command: /usr/bin/kafka_exporter -zookeeper-connect kafka:2181 -listen-address ':9101'
+
   cassandra:
     image: cassandra
     hostname: cassandra

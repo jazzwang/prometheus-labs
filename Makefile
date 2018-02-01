@@ -16,5 +16,5 @@ check:
 	@sbin/check.sh
 clean:
 	@sbin/clean.sh
-distclean:
+distclean: clean
 	@sbin/distclean.sh
