@@ -35,10 +35,25 @@ services:
     image: jazzwang/kafka:latest
     hostname: kafka
     container_name: kafka
+    ports:
+      - 2181:2181
+      - 9092:9092
     volumes:
       - ./kafka-broker:/etc/kafka
     environment:
       - KAFKA_OPTS=-javaagent:/etc/kafka/jmx_prometheus_javaagent.jar=7071:/etc/kafka/kafka-jmx.yml
+      - JMX_PORT=9999
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    hostname: kafka-manager
+    container_name: kafka-manager
+    ports:
+      - 9000:9000
+    environment:
+      - ZK_HOSTS=kafka:2181
+      - JAVA_OPTS=-Xmx512m
+      - APPLICATION_SECRET=letmein
 
   cassandra:
     image: cassandra
