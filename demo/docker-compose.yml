@@ -17,6 +17,8 @@ services:
     image: prom/snmp-exporter
     hostname: snmp-exporter
     container_name: snmp-exporter
+    volumes:
+      - ./snmp-exporter/conf/snmp.yml:/etc/snmp_exporter/snmp.yml
 
   alertmanager:
     image: prom/alertmanager
