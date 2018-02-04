@@ -6,13 +6,12 @@ services:
     image: polinux/snmpd:alpine
     hostname: snmpd
     container_name: snmpd
-    privileged: true
     cap_add:
       - NET_ADMIN
     ports:
       - 161:161/udp
     volumes:
-      - ./snmpd/conf:/data
+      - ./snmpd/conf/snmpd.conf:/etc/snmp/snmpd.conf
 
   snmp-exporter:
     image: prom/snmp-exporter
