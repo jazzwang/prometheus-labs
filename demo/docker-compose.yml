@@ -2,10 +2,28 @@ version: '2'
 
 services:
 
+  snmpd:
+    image: polinux/snmpd:alpine
+    hostname: snmpd
+    container_name: snmpd
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 161:161/udp
+    volumes:
+      - ./snmpd/conf:/data
+
+  snmp-exporter:
+    image: prom/snmp-exporter
+    hostname: snmp-exporter
+    container_name: snmp-exporter
+
   alertmanager:
     image: prom/alertmanager
     hostname: alertmanager
     container_name: alertmanager
+    restart: always
     volumes:
       - ./alertmanager/data:/alertmanager
       - ./alertmanager/conf/config.yml:/etc/alertmanager/config.yml
@@ -14,6 +32,7 @@ services:
     image: prom/prometheus:v2.1.0
     hostname: prometheus
     container_name: prometheus
+    restart: always
     ports:
       - 9090:9090
     volumes:
@@ -24,6 +43,7 @@ services:
     image: grafana/grafana:4.6.3
     hostname: grafana
     container_name: grafana
+    restart: always
     depends_on:
       - prometheus
     ports:
@@ -35,6 +55,7 @@ services:
     image: jazzwang/kafka:latest
     hostname: kafka
     container_name: kafka
+    restart: always
     ports:
       - 2181:2181
       - 9092:9092
@@ -48,6 +69,7 @@ services:
     image: sheepkiller/kafka-manager
     hostname: kafka-manager
     container_name: kafka-manager
+    restart: always
     ports:
       - 9000:9000
     environment:
@@ -55,17 +77,33 @@ services:
       - JAVA_OPTS=-Xmx512m
       - APPLICATION_SECRET=letmein
 
+###################################################################
+## NOTE: this kafka-exporter is for Kafka version less than 0.10 ##
+###################################################################
+#  kafka-exporter:
+#    build: ./kafka-exporter
+#    image: jazzwang/kafka-exporter:0.1.0
+#    hostname: kafka-exporter
+#    container_name: kafka-exporter
+#    restart: always
+#    depends_on:
+#      - kafka
+#    command: /usr/bin/kafka_exporter -zookeeper-connect kafka:2181 -listen-address ':9101'
+
   kafka-exporter:
-    build: ./kafka-exporter
-    image: jazzwang/kafka-exporter:0.1.0
+    image: danielqsj/kafka-exporter
     hostname: kafka-exporter
     container_name: kafka-exporter
-    command: /usr/bin/kafka_exporter -zookeeper-connect kafka:2181 -listen-address ':9101'
+    restart: always
+    depends_on:
+      - kafka
+    command: --kafka.server=kafka:9092
 
   cassandra:
     image: cassandra
     hostname: cassandra
     container_name: cassandra
+    restart: always
     volumes:
       - ./cassandra:/data/cassandra
     environment:
@@ -76,6 +114,7 @@ services:
     image: jazzwang/fluentd:v1.0
     hostname: fluentd
     container_name: fluentd
+    restart: always
     depends_on:
       - kafka
     volumes:
@@ -87,6 +126,16 @@ services:
     image: jazzwang/fluentd-exporter:0.1.0
     hostname: fluentd-exporter
     container_name: fluentd-exporter
+    restart: always
     depends_on:
       - fluentd
     command: fluentd_exporter -scrape_uri http://fluentd:24220/api/plugins.json
+
+  client:
+    image: debian:9
+    hostname: client
+    container_name: client
+    restart: always
+    stdin_open: true
+    tty: true
+    command: /bin/bash
