@@ -2,24 +2,6 @@ version: '2'
 
 services:
 
-  snmpd:
-    image: polinux/snmpd:alpine
-    hostname: snmpd
-    container_name: snmpd
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 161:161/udp
-    volumes:
-      - ./snmpd/conf/snmpd.conf:/etc/snmp/snmpd.conf
-
-  snmp-exporter:
-    image: prom/snmp-exporter
-    hostname: snmp-exporter
-    container_name: snmp-exporter
-    volumes:
-      - ./snmp-exporter/conf/snmp.yml:/etc/snmp_exporter/snmp.yml
-
   alertmanager:
     image: prom/alertmanager
     hostname: alertmanager
@@ -51,6 +33,34 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/data:/var/lib/grafana
+
+  snmpd:
+    image: polinux/snmpd:alpine
+    hostname: snmpd
+    container_name: snmpd
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 161:161/udp
+    volumes:
+      - ./snmpd/conf/snmpd.conf:/etc/snmp/snmpd.conf
+
+  snmp-exporter:
+    image: prom/snmp-exporter
+    hostname: snmp-exporter
+    container_name: snmp-exporter
+    volumes:
+      - ./snmp-exporter/conf/snmp.yml:/etc/snmp_exporter/snmp.yml
+
+  node1:
+    image: prom/node-exporter
+    hostname: node1
+    container_name: node1
+
+  node2:
+    image: prom/node-exporter
+    hostname: node2
+    container_name: node2
 
   kafka:
     image: jazzwang/kafka:latest
