@@ -108,5 +108,7 @@ echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( u
 echo "[1;33m    3.3.2 import 'Fluentd Output Health' Dashboard [0m"
 echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( upload 'demo/grafana/fluentd.json ) [0m"
 echo ""
+echo "... Press Any Key to continue ..."
+read
 docker-compose stop kafka kafka-manager kafka-exporter fluentd fluentd-exporter
 docker-compose ps
