@@ -23,6 +23,11 @@ echo "[1;33m 1.2      Grafana Web UI [0m"
 echo ""
 echo "[1;33m    1.2.1 Login                 - http://localhost:3000/login ( default: admin / admin )[0m"
 echo "[1;33m    1.2.2 Add data source       - http://localhost:3000/datasources/new?gettingstarted[0m"
+echo "[1;33m          - Name: Prometheus [0m"
+echo "[1;33m          - Type: Prometheus [0m"
+echo "[1;33m          - URL:  http://localhost:9090 [0m"
+echo "[1;33m          - Access: direct [0m"
+echo "[1;33m          - Click 'Add' [0m"
 echo "[1;33m    1.2.3 import Dashboards     - http://localhost:3000/datasources/edit/1[0m"
 echo "[1;33m    1.2.4 Prometheus Status     - http://localhost:3000/dashboard/db/prometheus-stats[0m"
 echo "[1;33m    1.2.5 Grafana Status        - http://localhost:3000/dashboard/db/grafana-metrics[0m"
@@ -46,6 +51,7 @@ echo "[1;33m                                  - command: './generator generate'
 echo ""
 echo "... Press Any Key to continue ..."
 read
+docker-compose stop snmpd snmp-exporter
 docker-compose up -d node1 node2
 docker-compose ps
 echo ""
@@ -67,7 +73,9 @@ echo "[1;33m                                - http://localhost:3000/dashboard/n
 echo ""
 echo "... Press Any Key to continue ..."
 read
-docker-compose up -d kafka kafka-manager fluentd fluentd-exporter
+docker-compose stop node1 node2
+docker-compose up -d kafka kafka-manager kafka-exporter fluentd fluentd-exporter
+docker-compose ps
 echo ""
 echo "[1;32m ###############################################[0m"
 echo "[1;32m ### DEMO #3 -- Middleware Monintoring       ###[0m"
@@ -100,3 +108,5 @@ echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( u
 echo "[1;33m    3.3.2 import 'Fluentd Output Health' Dashboard [0m"
 echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( upload 'demo/grafana/fluentd.json ) [0m"
 echo ""
+docker-compose stop kafka kafka-manager kafka-exporter fluentd fluentd-exporter
+docker-compose ps
