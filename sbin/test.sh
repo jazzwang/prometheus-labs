@@ -26,7 +26,8 @@ echo "[1;33m    1.2.2 Add data source       - http://localhost:3000/datasources
 echo "[1;33m    1.2.3 import Dashboards     - http://localhost:3000/datasources/edit/1[0m"
 echo "[1;33m    1.2.4 Prometheus Status     - http://localhost:3000/dashboard/db/prometheus-stats[0m"
 echo "[1;33m    1.2.5 Grafana Status        - http://localhost:3000/dashboard/db/grafana-metrics[0m"
-echo "[1;33m    1.2.6 import SNMP Dashboard - http://localhost:3000/dashboard/new?editview=import ( id = 1124 ) [0m"
+echo "[1;33m    1.2.6 import SNMP Dashboard [0m"
+echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( upload 'demo/grafana/snmp.json' ) [0m"
 echo ""
 echo "... Press Any Key to continue ..."
 read
@@ -36,7 +37,7 @@ echo "[1;33m    1.3.1 Configuration         - https://github.com/prometheus/snm
 echo "[1;33m                                  - input: snmp.yml [0m"
 echo ""
 echo "[1;33m    1.3.2 Understand Metrics    - docker exec -it client /bin/sh [0m"
-echo "[1;33m                                  / # curl -s http://snmp-exporter:9116/snmp?module=if_mib&target=snmpd | grep -v '^#' | sort [0m"
+echo "[1;33m          # curl -s \"http://snmp-exporter:9116/snmp?module=if_mib&target=snmpd\" | grep -v '^#' | sort [0m"
 echo ""
 echo "[1;33m    1.3.1 Config Generator      - https://github.com/prometheus/snmp_exporter/tree/master/generator [0m"
 echo "[1;33m                                  - input:   generator.yml [0m"
@@ -45,7 +46,6 @@ echo "[1;33m                                  - command: './generator generate'
 echo ""
 echo "... Press Any Key to continue ..."
 read
-docker-compose stop snmpd snmp-exporter       # stop snmp realted container to reduce system load
 docker-compose up -d node1 node2
 docker-compose ps
 echo ""
@@ -58,7 +58,7 @@ echo ""
 echo "[1;33m    2.1.1 Configuration         - https://github.com/prometheus/node_exporter [0m"
 echo ""
 echo "[1;33m    2.1.2 Understand Metrics    - docker exec -it client /bin/sh [0m"
-echo "[1;33m                                  / # curl -s http://node1:9100/metrics | grep -v '^#' | sort [0m"
+echo "[1;33m          # curl -s http://node1:9100/metrics | grep -v '^#' | sort [0m"
 echo ""
 echo "[1;33m    2.1.3 import 'Node Exporter Full' Dashboard [0m"
 echo "[1;33m                                - http://localhost:3000/dashboard/new?editview=import ( id = 1860 ) [0m"
@@ -67,7 +67,6 @@ echo "[1;33m                                - http://localhost:3000/dashboard/n
 echo ""
 echo "... Press Any Key to continue ..."
 read
-docker-compose stop node1 node2		      # stop node-exporter realted container to reduce system load
 docker-compose up -d kafka kafka-manager fluentd fluentd-exporter
 echo ""
 echo "[1;32m ###############################################[0m"
@@ -77,5 +76,27 @@ echo ""
 echo "[1;33m 3.1      JMX Exporter [0m"
 echo ""
 echo "[1;33m    3.1.1 Configuration         - https://github.com/prometheus/jmx_exporter#configuration [0m"
+echo "[1;33m    3.1.2 Example (1) Kafka     - https://robustperception.io/monitoring-kafka-with-prometheus/ [0m"
+echo "[1;33m    3.1.3 Example (1) Cassandra - https://robustperception.io/monitoring-cassandra-with-prometheus/ [0m"
 echo ""
-echo "[1;33m    3.1.2 Understand Metrics    [0m"
+echo "... Press Any Key to continue ..."
+read
+echo "[1;33m 3.2      Kafka Manager Web UI [0m"
+echo ""
+echo "[1;33m    3.2.1 Add Cluster           - http://localhost:9000/addCluster [0m"
+echo "[1;33m          - Cluster Name = Lab [0m"
+echo "[1;33m          - Cluster Zookeeper Hosts = kafka:2181 [0m"
+echo "[1;33m          - Enable JMX Polling : CHECKED [0m"
+echo "[1;33m          - Clicke "SAVE" [0m"
+echo "[1;33m    3.2.2 Topic Throughput      - http://localhost:9000/clusters/Lab/topics/dummy [0m"
+echo "[1;33m    3.2.3 Consumer Status       - http://localhost:9000/clusters/Lab/consumers/dummy/topic/dummy/type/KF [0m"
+echo ""
+echo "... Press Any Key to continue ..."
+read
+echo "[1;33m 3.3      Grafana Web UI [0m"
+echo ""
+echo "[1;33m    3.3.1 import 'Kafka I/O' Dashboard [0m"
+echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( upload 'demo/grafana/kafka.json ) [0m"
+echo "[1;33m    3.3.2 import 'Fluentd Output Health' Dashboard [0m"
+echo "[1;33m          - http://localhost:3000/dashboard/new?editview=import ( upload 'demo/grafana/fluentd.json ) [0m"
+echo ""
