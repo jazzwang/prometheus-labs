@@ -1,13 +1,13 @@
 #!/bin/bash
 cd demo
-docker-compose up -d prometheus grafana snmpd snmp-exporter
+docker-compose up -d prometheus grafana snmpd snmp-exporter client
 docker-compose ps
 echo ""
-echo "[1;32m ######[0m"
+echo "[1;32m ###############################################[0m"
 echo "[1;32m ### DEMO #1 -- Network Device Monintoring   ###[0m"
-echo "[1;32m ######[0m"
+echo "[1;32m ###############################################[0m"
 echo ""
-echo "[1;33m 1.1      Prometheus Web UI[0m"
+echo "[1;33m 1.1      Prometheus Web UI [0m"
 echo ""
 echo "[1;33m    1.1.1 Targets               - http://localhost:9090/targets[0m"
 echo "[1;33m    1.1.2 Current Configuration - http://localhost:9090/config[0m"
@@ -19,8 +19,7 @@ echo "[1;33m    1.1.7 Query & Graph         - https://goo.gl/5TmjWo[0m"
 echo ""
 echo "... Press Any Key to continue ..."
 read
-echo ""
-echo "[1;33m 1.2      Grafana Web UI[0m"
+echo "[1;33m 1.2      Grafana Web UI [0m"
 echo ""
 echo "[1;33m    1.2.1 Login                 - http://localhost:3000/login ( default: admin / admin )[0m"
 echo "[1;33m    1.2.2 Add data source       - http://localhost:3000/datasources/new?gettingstarted[0m"
@@ -31,12 +30,52 @@ echo "[1;33m    1.2.6 import SNMP Dashboard - http://localhost:3000/dashboard/n
 echo ""
 echo "... Press Any Key to continue ..."
 read
+echo "[1;33m 1.3      SNMP Exporter [0m"
+echo ""
+echo "[1;33m    1.3.1 Configuration         - https://github.com/prometheus/snmp_exporter [0m"
+echo "[1;33m                                  - input: snmp.yml [0m"
+echo ""
+echo "[1;33m    1.3.2 Understand Metrics    - docker exec -it client /bin/sh [0m"
+echo "[1;33m                                  / # curl -s http://snmp-exporter:9116/snmp?module=if_mib&target=snmpd | grep -v '^#' | sort [0m"
+echo ""
+echo "[1;33m    1.3.1 Config Generator      - https://github.com/prometheus/snmp_exporter/tree/master/generator [0m"
+echo "[1;33m                                  - input:   generator.yml [0m"
+echo "[1;33m                                  - output:  snmp.yml [0m"
+echo "[1;33m                                  - command: './generator generate' [0m"
+echo ""
+echo "... Press Any Key to continue ..."
+read
+docker-compose stop snmpd snmp-exporter       # stop snmp realted container to reduce system load
 docker-compose up -d node1 node2
 docker-compose ps
 echo ""
-echo "[1;33m 1.3      Node Exporter Metrics[0m"
+echo "[1;32m ###############################################[0m"
+echo "[1;32m ### DEMO #2 -- OS Level (Node) Monintoring  ###[0m"
+echo "[1;32m ###############################################[0m"
 echo ""
-echo "[1;33m    1.3.1 import 'Node Exporter Full' Dashboard [0m"
+echo "[1;33m 2.1      Node Exporter [0m"
+echo ""
+echo "[1;33m    2.1.1 Configuration         - https://github.com/prometheus/node_exporter [0m"
+echo ""
+echo "[1;33m    2.1.2 Understand Metrics    - docker exec -it client /bin/sh [0m"
+echo "[1;33m                                  / # curl -s http://node1:9100/metrics | grep -v '^#' | sort [0m"
+echo ""
+echo "[1;33m    2.1.3 import 'Node Exporter Full' Dashboard [0m"
 echo "[1;33m                                - http://localhost:3000/dashboard/new?editview=import ( id = 1860 ) [0m"
-echo "[1;33m    1.3.2 import 'Node Exporter Server Metrics' Dashboard [0m"
+echo "[1;33m    2.1.4 import 'Node Exporter Server Metrics' Dashboard [0m"
 echo "[1;33m                                - http://localhost:3000/dashboard/new?editview=import ( id = 405 ) [0m"
+echo ""
+echo "... Press Any Key to continue ..."
+read
+docker-compose stop node1 node2		      # stop node-exporter realted container to reduce system load
+docker-compose up -d kafka kafka-manager fluentd fluentd-exporter
+echo ""
+echo "[1;32m ###############################################[0m"
+echo "[1;32m ### DEMO #3 -- Middleware Monintoring       ###[0m"
+echo "[1;32m ###############################################[0m"
+echo ""
+echo "[1;33m 3.1      JMX Exporter [0m"
+echo ""
+echo "[1;33m    3.1.1 Configuration         - https://github.com/prometheus/jmx_exporter#configuration [0m"
+echo ""
+echo "[1;33m    3.1.2 Understand Metrics    [0m"

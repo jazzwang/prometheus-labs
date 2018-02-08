@@ -143,10 +143,11 @@ services:
     command: fluentd_exporter -scrape_uri http://fluentd:24220/api/plugins.json
 
   client:
-    image: debian:9
+    build: ./client
+    image: jazzwang/client
     hostname: client
     container_name: client
     restart: always
     stdin_open: true
     tty: true
-    command: /bin/bash
+    command: /bin/sh
