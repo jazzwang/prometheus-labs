@@ -196,4 +196,5 @@ Cleaning up intermediate files and folders
 
 ## Slides
 
+<div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/jazzwang/full-stack-monitoring-with-prometheus-and-grafana" title="Full Stack Monitoring with Prometheus and Grafana" target="_blank">Full Stack Monitoring with Prometheus and Grafana</a> </strong> from <strong><a href="https://www.slideshare.net/jazzwang" target="_blank">Jazz Yao-Tsung Wang</a></strong> </div>
 [![Link to Slideshare](https://image.slidesharecdn.com/fullstackmonitoringwithprometheus-180210035113/95/full-stack-monitoring-with-prometheus-and-grafana-1-638.jpg?cb=1518234875)](https://www.slideshare.net/jazzwang/full-stack-monitoring-with-prometheus-and-grafana)
