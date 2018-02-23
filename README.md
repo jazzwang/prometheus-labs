@@ -200,3 +200,13 @@ Cleaning up intermediate files and folders
 
 
 [![Link to Slideshare](https://image.slidesharecdn.com/fullstackmonitoringwithprometheus-180210035113/95/full-stack-monitoring-with-prometheus-and-grafana-1-638.jpg?cb=1518234875)](https://www.slideshare.net/jazzwang/full-stack-monitoring-with-prometheus-and-grafana)
+
+* 時間：2018-02-10 台灣資料工程協會 2018 第一季技術工作坊
+* 講題：使用普羅米修斯打造全棧式監控與告警平台 Building Full Stack Monitor and Notification with Prometheus
+* 摘要：
+
+```
+身為管理混合式雲端基礎建設的維運人員，面對分散在不同監控平台的數據是否感到頭疼呢？身為開發者，您是否苦於欠缺歷史監控數據來除錯或排查程式效能問題呢？本次分享將從動機面開始說明為何需要全棧式監控與告警平台，接著介紹過去一季講者如何使用普羅米修斯（Prometheus）與 Grafana 針對網路層、實體機器、虛擬機器、容器、中介軟體層（Ex. Apache Cassandra、Apache Kafka、CNCF Fluentd）、應用程式層來建立資料串流（Data Pipeline）的監控儀表板。礙於無法展示真實公司的環境，本分享將使用 Docker Compose 進行全棧式監控與告警平台的概念，也藉此逐一介紹搭建全棧式監控與告警平台會用到哪些普羅米修斯（Prometheus）的各類資料蒐集器（Exporter）。
+
+As a Hybrid Cloud Operator, are you tired of collecting monitor metrics from different monitor services? As a Developer, do you need historical application and infrastructure metrics to debug or improve application performance? In this talk, I'll first talk about why should we build Full Stack Monitor and Notification with Prometheus and Grafana. I'll share my personal experience about monitoring network devices, physical machines, virtual machines, docker containers, Middleware (Ex. Apache Cassandra, Apapche Kafka, CNCF Fluentd) and Application metrics. I'll demonstrate an End-to-End Data Pipeline Dashboard with Docker Compose examples and introduce different kinds of Prometheus Exporter used for different monitor targets. 
+```
