@@ -1,0 +1,53 @@
+version: '2'
+
+services:
+
+  prometheus:
+    image: prom/prometheus:v2.1.0
+    hostname: prometheus
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/conf:/etc/prometheus
+      - ./prometheus/data:/prometheus
+
+  kafka:
+    build: ./kafka-broker
+    image: jazzwang/kafka:latest
+    hostname: kafka
+    container_name: kafka
+    restart: always
+    ports:
+      - 2181:2181
+      - 9092:9092
+    volumes:
+      - ./kafka-broker/etc:/etc/kafka
+    environment:
+      - KAFKA_OPTS=-javaagent:/etc/kafka/jmx_prometheus_javaagent.jar=7071:/etc/kafka/kafka-jmx.yml
+      - JMX_PORT=9999
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    hostname: kafka-manager
+    container_name: kafka-manager
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - ZK_HOSTS=kafka:2181
+      - JAVA_OPTS=-Xmx512m
+      - APPLICATION_SECRET=letmein
+
+  fluentd:
+    build: ./fluentd
+    image: jazzwang/fluentd:v1.0
+    hostname: fluentd
+    container_name: fluentd
+    restart: always
+    depends_on:
+      - kafka
+    volumes:
+      - ./fluentd/etc:/etc/td-agent
+      - ./fluentd/data:/tmp
