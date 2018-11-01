@@ -75,3 +75,26 @@ scrape_configs:
       -
         targets:
           - snmpd
+  -
+    job_name: blackbox
+    metrics_path: /probe
+    params:
+      module:
+        - http_2xx
+    relabel_configs:
+      -
+        source_labels:
+          - __address__
+        target_label: __param_target
+      -
+        source_labels:
+          - __param_target
+        target_label: instance
+      -
+        replacement: "blackbox:9115"
+        target_label: __address__
+    static_configs:
+      -
+        targets:
+          - "http://prometheus.io"
+          - "https://prometheus.io"

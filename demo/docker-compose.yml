@@ -22,6 +22,16 @@ services:
       - ./prometheus/conf:/etc/prometheus
       - ./prometheus/data:/prometheus
 
+  blackbox:
+    image: prom/blackbox-exporter
+    hostname: blackbox
+    container_name: blackbox
+    restart: always
+    ports:
+      - 9115:9115
+    volumes:
+      - ./blackbox-exporter/conf:/config
+
   grafana:
     image: grafana/grafana:4.6.3
     hostname: grafana
